@@ -4,57 +4,20 @@
 
     var mapText = '上海交大闵行校区（东川路）'
     var panoText = '留园餐厅2楼'
-    function Warper (div){
-      this.div = div;
-
-      this.add();
-      this.click();
-    }
-
-    Warper.prototype.click = function(){
-      
-    }
-    Warper.prototype.add = function(){
-      var self = this;
-      setTimeout(function(){
-      var child = $('<div></<div>');
-      child
-      .css('background','rgba(255,0,0,0.6)')
-      .css('width','100%')
-      .css('height','100%')
-      .css('zIndex',900000000);
-      self.div.append(child);
-      self.child = child;        
-    },4000)
-    };
-
-    Warper.prototype.clear = function(){
-      this.child.fadeout();
-    }
 
 
     var Information = function(){
-      this.mapTpye = true;
+      this.mapType = true;
       this.panoTpye = true;
+      this.mapBol = false;
       // this.map();
       // this.pano();
       // this.wraper();
       this.click();
     };
 
-    Information.prototype.wraper = function(){
-      this.wraperMap = new Warper($('#map'));
-      this.wraperPano = new Warper($('#pano'));
-    }
-
     Information.prototype.maps = function(){
-      var mapDiv = $('<div></div>')
-      .css('width','100%')
-      .css('height','100%')
-      .attr('id','mapDiv');
-      $('#map').append(mapDiv);
-
-      this.map = new Map(mapDiv);
+      this.map = new Map($('#map'));
     // $('#mapDiv').find('.amap-logo').remove();
     // $('#mapDiv').find('.amap-copyright').remove();
     };
@@ -79,36 +42,38 @@
 
     Information.prototype.shrink = function(){
       this.clearMap();
+      this.mapType = true;
+      this.panoTpye = true;
+      this.mapBol = false;
       $('#map').removeClass('big').removeClass('fullScreen').css('zIndex',1).addClass('mapSmall').text(mapText);
-      $('#pano').removeClass('big').removeClass('fullScreen').css('zIndex',1).addClass('panoSmall').text(panoText).css('background','rgba(200,50,150,0.7)');
+      $('#pano').removeClass('big').removeClass('fullScreen').css('zIndex',1).addClass('panoSmall').text(panoText).css('background','rgba(0,150,180,0.7)');
     }
 
     Information.prototype.click = function(){
       var self = this;
 
       $('#map').click(function(){
-        if(self.mapTpye){
-          $('#map').removeClass('mapSmall').addClass('big').css('zIndex',100000).text('');
-          $('#pano').text('收起↑');
+        if(self.mapType){
+          $('#pano').text('收起 ↑');
           self.panoTpye = false;
-          self.maps();
+          if(!self.mapBol){
+            $('#map').removeClass('mapSmall').addClass('big').css('zIndex',100000).text('');
+            self.maps();
+          }
+          self.mapBol = true;
         }else{
-          self.shrink();
-          $('#map').removeClass('big').removeClass('fullScreen').css('zIndex',1).addClass('mapSmall').text(mapText)
+           self.shrink();
         }
-        self.mapTpye = !self.mapTpye;
       });
 
       $('#pano').click(function(){
         if(self.panoTpye){
-          self.mapTpye = false;
+          self.mapType = false;
           $('#pano').removeClass('panoSmall').addClass('big').css('zIndex',100000).text('');
-          $('#map').text('收起');
+          $('#map').text('收起 ↑');
           self.pano();
         }else{
           self.shrink();
-          $('#pano').removeClass('big').addClass('panoSmall');
         }
-        self.panoTpye = !self.panoTpye;
         });
     }

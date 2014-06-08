@@ -1,7 +1,7 @@
 !(function(exports){
   function Map(container){
     this.container = $(container);
-
+    
     this.map();
     this.polyline();
     this.makers();
@@ -9,20 +9,50 @@
   }
 
   Map.prototype.map = function(){
-    var map = this.mapObj = new qq.maps.Map(this.container[0], {
+    var mapDiv = this.mapDiv = $('<div></div>')
+      .css('background','rgba(255,0,0,0.6)')
+      .css('width','100%')
+      .css('height','100%')
+      .css('zIndex',2);
+      this.container.append(mapDiv);
+    var map = this.mapObj = new qq.maps.Map(this.mapDiv[0], {
         center: new qq.maps.LatLng(31.0259,121.4326),
         zoom:15
     }) 
   };
 
   Map.prototype.searches = function(){
-    var input = this.searches = 
+    var input = this.input = 
     $('<input></input>')
-    .css('zIndex',10000)
+    .css('zIndex',100)
+    .css('position','absolute')
+    .css("width",'80%')
+    .css("top",'0%')
+    .css("left",'0%')
+    .css('height','10%')
+    .css('background','#fff')
     .attr('type','textbox')
+    .css('fontSize','30px')
     .attr('value','上海交通大学闵行校区');
     this.container.append(input);
-  }
+
+   var inputH = input.height()+4;
+   var searchBotton = this.searchBotton =
+   $('<div></div>')
+   .css('position','absolute')
+   .css('zIndex',100) 
+   .css("top",'0%')
+   .css("left",'80%')
+   .css('height',inputH+'px')
+   .css('lineHeight',inputH+'px')
+   .css('width','20%')
+   .css('background','#099')
+   .css('fontSize','30px')
+   .text('搜路线')
+   ;
+   this.container.append(searchBotton);
+ } 
+
 
   Map.prototype.polyline = function(){
     var latlngs = [
